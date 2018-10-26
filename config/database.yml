@@ -1,0 +1,14 @@
+default: &default
+  adapter: postgresql
+  encoding: unicode
+  pool: 5
+  reaping_frequency: 10
+  timeout: 5000
+
+development:
+  <<: *default
+  database: instarise_development
+
+test:
+  <<: *default
+  database: instarise_test
