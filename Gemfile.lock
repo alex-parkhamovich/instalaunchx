@@ -170,6 +170,9 @@ GEM
     selenium-webdriver (3.14.1)
       childprocess (~> 0.5)
       rubyzip (~> 1.2, >= 1.2.2)
+    slim (4.0.1)
+      temple (>= 0.7.6, < 0.9)
+      tilt (>= 2.0.6, < 2.1)
     spring (2.0.2)
       activesupport (>= 4.2)
     spring-watcher-listen (2.0.1)
@@ -182,6 +185,7 @@ GEM
       actionpack (>= 4.0)
       activesupport (>= 4.0)
       sprockets (>= 3.0.0)
+    temple (0.8.0)
     thor (0.20.0)
     thread_safe (0.3.6)
     tilt (2.0.8)
@@ -216,11 +220,12 @@ DEPENDENCIES
   pg
   pry
   puma (~> 3.11)
-  rack-test
+  rack
   rails (~> 5.2.1)
   rspec
   sass-rails (~> 5.0)
   selenium-webdriver
+  slim
   spring
   spring-watcher-listen (~> 2.0.0)
   turbolinks (~> 5)

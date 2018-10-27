@@ -1,7 +1,7 @@
 module Automation
   class Login < Base
     def initialize
-      session.visit login_url
+      visit login_url
       human_delay
 
       # TODO: create autologin

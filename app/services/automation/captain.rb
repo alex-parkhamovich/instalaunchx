@@ -1,13 +1,14 @@
 module Automation
   class Captain < Base
     def rise
-      session.visit 'https://www.instagram.com/accounts/login/?source=auth_switcher'
+      restore_session
 
-      binding.pry
-      # Automation::Login.new
-      # human_delay
+      visit 'https://www.instagram.com/accounts/login/?source=auth_switcher'
+      human_delay
 
-      # Automation::Like.new
+      Automation::Like.new
+
+      true
     end
   end
 end
