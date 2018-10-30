@@ -8,6 +8,10 @@ module Automation
 
     Capybara.default_driver = :selenium_chrome
 
+    def around_like_delay
+      sleep(rand(15.0..20.0))
+    end
+
     def human_delay
       sleep(rand(1.0..3.0))
     end

@@ -8,6 +8,9 @@ module Automation
 
       Automation::Like.new
 
+      followers.first(10).each do |follower|
+        Automation::Like.new(follower).like
+      end
       true
     end
   end
