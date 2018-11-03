@@ -1,23 +1,23 @@
 module Automation
   module Followers
     class Fetcher < Base
-      def initialize(profile_name = 'e36.only')
+      def initialize
         restore_session
+      end
 
+      def run(profile_name = 'e36.only')
         visit "https://www.instagram.com/#{profile_name}"
-        page.find(:xpath, "//a[contains(@href, 'followers')]").click
+        page.find(:xpath, "//a[contains(@href, 'followers') and not(contains(@href, 'mutualOnly'))]").click
 
-        fetch_follower_names
+        fetch_follower_links
       end
 
       private
 
-      def fetch_follower_names
-        followers = []
-        page.find_all(:xpath, "//a[contains(@class, 'FPmhX')]").each do |follower|
-           followers << follower.text
+      def fetch_follower_links
+        page.find_all(:xpath, "//a[contains(@class, 'FPmhX')]").map do |follower|
+          follower[:href]
         end
-        followers
       end
 
       def scroll_followers_modal

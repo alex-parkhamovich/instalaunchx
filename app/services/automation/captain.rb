@@ -3,15 +3,19 @@ module Automation
     def rise
       restore_session
 
-      visit 'https://www.instagram.com/accounts/login/?source=auth_switcher'
-      human_delay
+      Automation::Posts::Liker.new(post_links: fetch_post_links).run
+    end
 
-      Automation::Like.new
+    private
 
-      followers.first(10).each do |follower|
-        Automation::Like.new(follower).like
-      end
-      true
+    def fetch_follower_links
+      Automation::Followers::Fetcher.new.run
+    end
+
+    def fetch_post_links
+      Automation::Posts::Fetcher.new(
+        tag_names: ['followtofollow']
+      ).run
     end
   end
 end
