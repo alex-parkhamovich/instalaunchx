@@ -3,10 +3,12 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
 ruby '2.5.1'
 
+gem 'activeadmin'
 gem 'bootsnap', '>= 1.1.0', require: false
 gem 'capybara'
 gem 'capybara-sessionkeeper'
 gem 'chromedriver-helper'
+gem 'devise'
 gem 'jbuilder', '~> 2.5'
 gem 'pg'
 gem 'pry'
