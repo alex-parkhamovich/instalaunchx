@@ -6,7 +6,11 @@ module Automation
   class Base
     include Capybara::DSL
 
-    Capybara.default_driver = :selenium_chrome
+    if Rails.env.development?
+      Capybara.default_driver = :selenium_chrome
+    else
+      Capybara.default_driver = :selenium_headless_chrome
+    end
 
     def around_like_delay
       sleep(rand(15.0..20.0))
