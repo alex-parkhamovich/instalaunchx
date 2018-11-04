@@ -8,7 +8,6 @@ module Automation
       end
 
       def run
-        binding.pry
         post_links.each do |post_link|
           return unless current_account.automation_enabled
 
@@ -19,7 +18,12 @@ module Automation
           next
         end
 
-        puts "#{@metric} posts liked overall"
+        current_account.update_attributes(
+          automation_enabled: false,
+          current_worker_id: nil
+        )
+
+        puts '--- Promotion successfully ended ---'
       end
 
       private
@@ -29,7 +33,7 @@ module Automation
           likes_count: current_account.likes_count += 1
         )
 
-        puts 'Successfully liked'
+        puts '--- Successfully liked ---'
       end
 
       def press_like_button

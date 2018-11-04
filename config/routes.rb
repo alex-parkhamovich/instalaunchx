@@ -1,5 +1,5 @@
 Rails.application.routes.draw do
-  root 'captains#index'
+  root 'launchers#index'
 
-  resources :captains
+  resources :launchers
 end

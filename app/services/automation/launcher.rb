@@ -1,5 +1,5 @@
 module Automation
-  class Captain < Base
+  class Launcher < Base
     def rise
       restore_session
 

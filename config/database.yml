@@ -7,8 +7,8 @@ default: &default
 
 development:
   <<: *default
-  database: instarise_development
+  database: instalaunchx_development
 
 test:
   <<: *default
-  database: instarise_test
+  database: instalaunchx_test

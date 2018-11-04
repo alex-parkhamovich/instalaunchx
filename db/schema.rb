@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_10_30_210024) do
+ActiveRecord::Schema.define(version: 2018_11_03_204819) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -18,6 +18,7 @@ ActiveRecord::Schema.define(version: 2018_10_30_210024) do
   create_table "accounts", force: :cascade do |t|
     t.integer "likes_count", default: 0
     t.boolean "automation_enabled"
+    t.string "current_worker_id"
   end
 
 end

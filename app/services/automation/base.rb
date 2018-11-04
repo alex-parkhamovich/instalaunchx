@@ -22,7 +22,7 @@ module Automation
 
     def restore_session
       visit 'https://www.instagram.com/accounts/login/?source=auth_switcher'
-      Capybara.current_session.restore_cookies("/Users/Alex/Documents/Projects/instarise/capybara-201810270922091638778457.cookies.txt")
+      Capybara.current_session.restore_cookies("/Users/Alex/Documents/Projects/instalaunchx/capybara-201810270922091638778457.cookies.txt")
     end
 
     def save_session
