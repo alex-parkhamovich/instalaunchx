@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_11_04_171125) do
+ActiveRecord::Schema.define(version: 2018_11_14_205105) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -31,6 +31,15 @@ ActiveRecord::Schema.define(version: 2018_11_04_171125) do
     t.datetime "updated_at", null: false
     t.index ["email"], name: "index_admin_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_admin_users_on_reset_password_token", unique: true
+  end
+
+  create_table "promotions", force: :cascade do |t|
+    t.integer "account_id"
+    t.integer "likes_count", default: 0
+    t.string "profile_names"
+    t.string "status"
+    t.string "tag_names"
+    t.string "worker_uuid"
   end
 
 end
