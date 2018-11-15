@@ -1,9 +1,11 @@
-.notice
-  = flash[:notice]
-
-- if @status == :working || @status == :queued
-  h3 Please wait until old workers will be ended
-- else
-  = button_to 'Promote your instagram', launchers_path(method: :post, type: :start)
-
-= button_to 'Stop promotion', launchers_path(method: :post, type: :stop)
+.box
+  .item
+    .notice
+      = flash[:notice]
+    .item
+      - if @status == :working || @status == :queued
+        h3 Please wait until old workers will be ended
+      - else
+        = button_to 'Promote your instagram', launchers_path(method: :post, type: :start)
+    .item
+      = button_to 'Stop promotion', launchers_path(method: :post, type: :stop)

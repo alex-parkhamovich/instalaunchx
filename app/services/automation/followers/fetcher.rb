@@ -5,11 +5,15 @@ module Automation
         restore_session
       end
 
-      def run(profile_name = 'e36.only')
-        visit "https://www.instagram.com/#{profile_name}"
-        page.find(:xpath, "//a[contains(@href, 'followers') and not(contains(@href, 'mutualOnly'))]").click
+      def run
+        last_promotion_profile_names.map do |profile_name|
+          human_delay
+          visit "https://www.instagram.com/#{profile_name}"
+          page.find(:xpath, "//a[contains(@href, 'followers') and not(contains(@href, 'mutualOnly'))]").click
 
-        fetch_follower_links
+          puts "--- #{profile_name}'s follower links fetched ---"
+          fetch_follower_links
+        end.flatten.uniq
       end
 
       private
@@ -20,11 +24,15 @@ module Automation
         end
       end
 
-      def scroll_followers_modal
-        within page.find(:xpath, "//*[@role='dialog']") do
-          #scroll
-        end
+      def last_promotion_profile_names
+        Promotion.last.profile_names.split(' ')
       end
+
+      # def scroll_followers_modal
+      #   within page.find(:xpath, "//*[@role='dialog']") do
+      #     #scroll
+      #   end
+      # end
     end
   end
 end

@@ -11,16 +11,18 @@ module Automation
       end
 
       def run
-        return from_follower_accounts unless follower_links.empty?
-        return from_tag_posts unless tag_names.empty?
+        post_links = []
+        post_links << from_follower_accounts unless follower_links.empty?
+        post_links << from_tag_posts unless tag_names.empty?
+        post_links.flatten
       end
 
       private
 
-      def get_only_recent_posts
+      def get_only_recent_uniq_posts
         post_links = fetch_post_links
         post_links.slice!(0..8)
-        post_links
+        post_links.uniq
       end
 
       def fetch_post_links
@@ -31,18 +33,24 @@ module Automation
 
       def from_follower_accounts
         follower_links.map do |followers_account_link|
+          human_delay
           visit followers_account_link
 
+
+          puts "--- #{followers_account_link}'s posts fetched ---"
           fetch_post_links.first(2)
         end
       end
 
       def from_tag_posts
         tag_names.map do |tag_name|
+          human_delay
           visit "https://www.instagram.com/explore/tags/#{tag_name}/"
 
           scroll_to_render_posts
-          get_only_recent_posts
+
+          puts "--- ##{tag_name}'s posts fetched ---"
+          get_only_recent_uniq_posts
         end
       end
 

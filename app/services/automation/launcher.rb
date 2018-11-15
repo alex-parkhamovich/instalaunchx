@@ -14,8 +14,13 @@ module Automation
 
     def fetch_post_links
       Automation::Posts::Fetcher.new(
-        tag_names: ['followtofollow']
+        tag_names: last_promotion_tag_names,
+        follower_links: fetch_follower_links
       ).run
+    end
+
+    def last_promotion_tag_names
+      Promotion.last.tag_names.split(' ')
     end
   end
 end

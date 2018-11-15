@@ -20,6 +20,10 @@ module Automation
       Account.first
     end
 
+    def current_promotion
+      Promotion.last
+    end
+
     def human_delay
       sleep(rand(1.0..3.0))
     end
