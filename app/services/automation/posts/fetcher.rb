@@ -33,9 +33,10 @@ module Automation
 
       def from_follower_accounts
         follower_links.map do |followers_account_link|
+          return unless current_account.automation_enabled
           human_delay
-          visit followers_account_link
 
+          visit followers_account_link
 
           puts "--- #{followers_account_link}'s posts fetched ---"
           fetch_post_links.first(2)
@@ -44,9 +45,10 @@ module Automation
 
       def from_tag_posts
         tag_names.map do |tag_name|
+          return unless current_account.automation_enabled
           human_delay
-          visit "https://www.instagram.com/explore/tags/#{tag_name}/"
 
+          visit "https://www.instagram.com/explore/tags/#{tag_name}/"
           scroll_to_render_posts
 
           puts "--- ##{tag_name}'s posts fetched ---"

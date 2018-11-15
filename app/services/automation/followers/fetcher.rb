@@ -7,7 +7,9 @@ module Automation
 
       def run
         last_promotion_profile_names.map do |profile_name|
+          return unless current_account.automation_enabled
           human_delay
+
           visit "https://www.instagram.com/#{profile_name}"
           page.find(:xpath, "//a[contains(@href, 'followers') and not(contains(@href, 'mutualOnly'))]").click
 
