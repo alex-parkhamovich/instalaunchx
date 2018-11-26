@@ -14,7 +14,6 @@ module Automation
 
     def fetch_post_links
       Automation::Posts::Fetcher.new(
-        tag_names: last_promotion_tag_names,
         follower_links: fetch_follower_links
       ).run
     end

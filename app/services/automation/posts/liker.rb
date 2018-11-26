@@ -40,7 +40,7 @@ module Automation
         count_likes_metric
         around_like_delay
 
-        puts '--- #{post_link} successfully liked ---'
+        puts "--- #{post_link} successfully liked ---"
       end
     end
   end

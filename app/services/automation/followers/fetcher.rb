@@ -1,40 +1,64 @@
 module Automation
   module Followers
     class Fetcher < Base
+      # Automation::Followers::Fetcher.new.run
+
       def initialize
         restore_session
       end
 
       def run
-        last_promotion_profile_names.map do |profile_name|
+        links = last_promotion_profile_names.map do |profile_name|
           return unless current_account.automation_enabled
           human_delay
 
           visit "https://www.instagram.com/#{profile_name}"
-          page.find(:xpath, "//a[contains(@href, 'followers') and not(contains(@href, 'mutualOnly'))]").click
 
-          puts "--- #{profile_name}'s follower links fetched ---"
-          fetch_follower_links
+          puts "--- #{profile_name}'s follower links is fetching ---"
+          fetch_followers
         end.flatten.uniq
+
+        puts "--- #{links.count} ---"
+        links
       end
 
       private
 
-      def fetch_follower_links
+      def collect_follower_links
         page.find_all(:xpath, "//a[contains(@class, 'FPmhX')]").map do |follower|
           follower[:href]
         end
+      end
+
+      def fetch_followers
+        resize_window('mobile')
+
+        open_followers_page
+        wait_until_links_render
+        links = collect_follower_links
+
+        puts '--- Fetch succeed. #{links.count} fetched ---'
+        links
       end
 
       def last_promotion_profile_names
         Promotion.last.profile_names.split(' ')
       end
 
-      # def scroll_followers_modal
-      #   within page.find(:xpath, "//*[@role='dialog']") do
-      #     #scroll
-      #   end
-      # end
+      def open_followers_page
+        page.find(
+          :xpath,
+          "//a[contains(@href, 'followers') and " \
+          "not(contains(@href, 'mutualOnly'))]"
+        ).click
+      end
+
+      def wait_until_links_render
+        7.times do
+          page.execute_script 'window.scrollBy(0, 100000)'
+          human_delay
+        end
+      end
     end
   end
 end

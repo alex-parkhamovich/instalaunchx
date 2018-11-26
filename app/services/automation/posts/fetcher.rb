@@ -5,6 +5,7 @@ module Automation
 
       def initialize(follower_links: [], tag_names: [])
         restore_session
+        resize_window
 
         self.follower_links = follower_links
         self.tag_names = tag_names
@@ -14,6 +15,8 @@ module Automation
         post_links = []
         post_links << from_follower_accounts unless follower_links.empty?
         post_links << from_tag_posts unless tag_names.empty?
+
+        puts "--- #{post_links.count} ---"
         post_links.flatten
       end
 
@@ -39,7 +42,9 @@ module Automation
           visit followers_account_link
 
           puts "--- #{followers_account_link}'s posts fetched ---"
-          fetch_post_links.first(2)
+          links = fetch_post_links.first(4)
+          links.delete_at(1)
+          links
         end
       end
 
