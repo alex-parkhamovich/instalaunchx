@@ -4,6 +4,10 @@ class ApplicationController < ActionController::Base
   end
 
   def current_promotion
-    Promotion.last
+    @current_promotion ||= Promotion.new(
+      account_id: 1,
+      profile_names: Promotion.first.profile_names,
+      tag_names: Promotion.first.tag_names
+    )
   end
 end

@@ -1,4 +1,4 @@
-module Automation
+module Bot
   module Posts
     class Liker < Base
       attr_accessor :post_links
@@ -12,16 +12,12 @@ module Automation
           return unless current_account.automation_enabled
 
           visit post_link
-
           press_like_button(post_link) unless page.has_xpath?("//*[@aria-label='Unlike']")
         rescue
           next
         end
 
-        current_account.update_attributes(
-          automation_enabled: false,
-          current_worker_id: nil
-        )
+        stop_working
 
         puts '--- Promotion successfully ended ---'
       end
@@ -41,6 +37,13 @@ module Automation
         around_like_delay
 
         puts "--- #{post_link} successfully liked ---"
+      end
+
+      def stop_working
+        current_account.update_attributes(
+          automation_enabled: false,
+          current_worker_id: nil
+        )
       end
     end
   end

@@ -2,7 +2,7 @@ require 'capybara'
 require 'capybara/dsl'
 require 'capybara/sessionkeeper'
 
-module Automation
+module Bot
   class Base
     include Capybara::DSL
 
@@ -17,7 +17,7 @@ module Automation
     }
 
     if Rails.env.development?
-      Capybara.default_driver = :selenium_chrome_headless
+      Capybara.default_driver = :selenium_chrome
     else
       Capybara.default_driver = :selenium_chrome_headless
     end
@@ -31,7 +31,10 @@ module Automation
     end
 
     def current_promotion
-      Promotion.last
+      @current_promotion ||= Promotion.new(
+        account_id: 1,
+        profile_names: 'e36.only'
+      )
     end
 
     def human_delay

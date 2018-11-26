@@ -1,14 +1,12 @@
-module Automation
+module Bot
   module Followers
     class Fetcher < Base
-      # Automation::Followers::Fetcher.new.run
-
       def initialize
         restore_session
       end
 
       def run
-        links = last_promotion_profile_names.map do |profile_name|
+        links = current_promotion_profile_names.map do |profile_name|
           return unless current_account.automation_enabled
           human_delay
 
@@ -18,6 +16,7 @@ module Automation
           fetch_followers
         end.flatten.uniq
 
+        binding.pry
         puts "--- #{links.count} ---"
         links
       end
@@ -41,8 +40,8 @@ module Automation
         links
       end
 
-      def last_promotion_profile_names
-        Promotion.last.profile_names.split(' ')
+      def current_promotion_profile_names
+        current_promotion.profile_names.split(' ')
       end
 
       def open_followers_page

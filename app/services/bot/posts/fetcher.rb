@@ -1,4 +1,4 @@
-module Automation
+module Bot
   module Posts
     class Fetcher < Base
       attr_accessor :follower_links, :tag_names
@@ -16,7 +16,7 @@ module Automation
         post_links << from_follower_accounts unless follower_links.empty?
         post_links << from_tag_posts unless tag_names.empty?
 
-        puts "--- #{post_links.count} ---"
+        puts "--- #{post_links.flatten.count} ---"
         post_links.flatten
       end
 
