@@ -5,7 +5,6 @@ module Bot
 
       def initialize(follower_links: [], tag_names: [])
         restore_session
-        resize_window
 
         self.follower_links = follower_links
         self.tag_names = tag_names

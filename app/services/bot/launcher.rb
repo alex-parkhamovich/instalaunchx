@@ -10,6 +10,7 @@ module Bot
 
     def fetch_follower_links
       Bot::Followers::Fetcher.new.run
+      current_promotion.followers
     end
 
     def fetch_post_links

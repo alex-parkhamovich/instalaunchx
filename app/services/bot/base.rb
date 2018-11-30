@@ -6,18 +6,28 @@ module Bot
   class Base
     include Capybara::DSL
 
-    DEFAULT_WINDOW_SIZE = {
-      width: 1280,
-      height: 800
-    }
-
-    MOBILE_WINDOW_SIZE = {
-      width: 375,
-      height: 800
-    }
+    Capybara.register_driver :mobile_chrome do |app|
+      Capybara::Selenium::Driver.new(app,
+        browser: :chrome,
+        desired_capabilities:
+          Selenium::WebDriver::Remote::Capabilities.chrome(
+            'chromeOptions' => {
+              'mobileEmulation' => {
+                'deviceMetrics' => {
+                  'width' => 360, 'height' => 640, 'pixelRatio' => 3.0
+                },
+                'userAgent' =>
+                  "Mozilla/5.0 (Linux; Android 4.2.1; en-us; Nexus 5 " \
+                  "Build/JOP40D) AppleWebKit/535.19 (KHTML, like Gecko) " \
+                  "Chrome/18.0.1025.166 Mobile Safari/535.19"
+              }
+            }
+          )
+      )
+    end
 
     if Rails.env.development?
-      Capybara.default_driver = :selenium_chrome
+      Capybara.default_driver = :mobile_chrome
     else
       Capybara.default_driver = :selenium_chrome_headless
     end
@@ -39,21 +49,6 @@ module Bot
 
     def human_delay
       sleep(rand(1.0..3.0))
-    end
-
-    def resize_window(type = nil)
-      if type == 'mobile'
-        page.driver.browser.manage.window.resize_to(
-          MOBILE_WINDOW_SIZE[:width],
-          MOBILE_WINDOW_SIZE[:height]
-        )
-      else
-        page.driver.browser.manage.window.resize_to(
-          DEFAULT_WINDOW_SIZE[:width],
-          DEFAULT_WINDOW_SIZE[:height]
-        )
-      end
-      page.driver.refresh
     end
 
     def restore_session
