@@ -9,16 +9,13 @@ module Bot
         def initialize
           restore_session
 
-          LikesCounter.create(
-            account: current_account
-          ) unless current_likes_counter
-
-          self.followers = current_promotion.followers
+          self.followers = current_promotion.followers_pack.followers
         end
 
         def run
           followers.each do |follower_profile_url|
-            return unless current_account.automation_enabled
+            return puts '--- automation disabled for current account ---' unless current_account.automation_enabled
+            return puts '--- todays likes count is more than 900 for current account ---' if todays_likes_limit_reached?
 
             visit follower_profile_url + 'feed'
             next if profile_private_or_already_liked?(follower_profile_url)
@@ -32,9 +29,7 @@ module Bot
         private
 
         def count_likes_metric
-          current_likes_counter.update_attributes(
-            amount: current_likes_counter.amount += 1
-          )
+          Bot::LikesCounters::Builder.new.build
         end
 
         def find_all_heart_buttons

@@ -32,19 +32,16 @@ module Bot
       Capybara.default_driver = :selenium_chrome_headless
     end
 
+    def todays_likes_limit_reached?
+      current_account.likes_counters.todays.map(&:amount).sum > 900
+    end
+
     def around_like_delay
       sleep(rand(15.0..20.0))
     end
 
     def current_account
       Account.last
-    end
-
-    def current_likes_counter
-      LikesCounter.find_by(
-        account: current_account,
-        created_at: Time.zone.now.beginning_of_day..Time.zone.now.end_of_day
-      )
     end
 
     def current_promotion

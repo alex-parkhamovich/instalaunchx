@@ -5,24 +5,13 @@ module Bot
     class Fetcher < Base
       def initialize
         restore_session
-
-        create_promotion
       end
 
       def run
-        current_promotion.update_attributes(
-          followers: perform_fetching
-        )
+        Bot::FollowersPacks::Builder.new(followers: perform_fetching).build
       end
 
       private
-
-      def create_promotion
-        Promotion.create(
-          account: current_account,
-          profile_names: 'e36.only e36fanatics'
-        )
-      end
 
       def collect_follower_links
         page.find_all(:xpath, "//a[contains(@class, 'FPmhX')]").map do |follower|
