@@ -37,14 +37,18 @@ module Bot
     end
 
     def current_account
-      Account.first
+      Account.last
+    end
+
+    def current_likes_counter
+      LikesCounter.find_by(
+        account: current_account,
+        created_at: Time.zone.now.beginning_of_day..Time.zone.now.end_of_day
+      )
     end
 
     def current_promotion
-      @current_promotion ||= Promotion.new(
-        account_id: 1,
-        profile_names: 'e36.only'
-      )
+      Promotion.last
     end
 
     def human_delay

@@ -9,7 +9,11 @@ module Bot
         def initialize
           restore_session
 
-          self.followers = Promotion.last.followers
+          LikesCounter.create(
+            account: current_account
+          ) unless current_likes_counter
+
+          self.followers = current_promotion.followers
         end
 
         def run
@@ -28,8 +32,8 @@ module Bot
         private
 
         def count_likes_metric
-          Promotion.last.update_attributes(
-            likes_count: Promotion.last.likes_count += 1
+          current_likes_counter.update_attributes(
+            amount: current_likes_counter.amount += 1
           )
         end
 
