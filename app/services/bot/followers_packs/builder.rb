@@ -8,7 +8,6 @@ module Bot
       end
 
       def build
-        binding.pry
         if current_followers_pack
           current_followers_pack.update_attributes(followers: followers)
         else
