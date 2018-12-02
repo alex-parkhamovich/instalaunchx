@@ -6,12 +6,9 @@ module Bot
   class Base
     include Capybara::DSL
 
-    Capybara.register_driver :mobile_chrome do |app|
-      Capybara::Selenium::Driver.new(app,
-        browser: :chrome,
-        desired_capabilities:
-          Selenium::WebDriver::Remote::Capabilities.chrome(
+    caps = Selenium::WebDriver::Remote::Capabilities.chrome(
             'chromeOptions' => {
+              'binary' => "#{ENV['GOOGLE_CHROME_SHIM']}",
               'mobileEmulation' => {
                 'deviceMetrics' => {
                   'width' => 360, 'height' => 640, 'pixelRatio' => 3.0
@@ -23,14 +20,16 @@ module Bot
               }
             }
           )
+
+    Capybara.register_driver :mobile_chrome do |app|
+      binding.pry
+      Capybara::Selenium::Driver.new(app,
+        browser: :chrome,
+        desired_capabilities: caps
       )
     end
 
-    if Rails.env.development?
-      Capybara.default_driver = :mobile_chrome
-    else
-      Capybara.default_driver = :selenium_chrome_headless
-    end
+    Capybara.default_driver = :mobile_chrome
 
     def todays_likes_limit_reached?
       current_account.likes_counters.todays.map(&:amount).sum > 900
