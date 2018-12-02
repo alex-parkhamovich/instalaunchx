@@ -22,7 +22,6 @@ module Bot
           )
 
     Capybara.register_driver :mobile_chrome do |app|
-      binding.pry
       Capybara::Selenium::Driver.new(app,
         browser: :chrome,
         desired_capabilities: caps
@@ -53,7 +52,7 @@ module Bot
 
     def restore_session
       visit 'https://www.instagram.com/accounts/login/?source=auth_switcher'
-      Capybara.current_session.restore_cookies("/Users/Alex/Documents/Projects/instalaunchx/public/cookies/alex_parkhamovich.cookies.txt")
+      Capybara.current_session.restore_cookies("/Users/Alex/Documents/Projects/instalaunchx/lib/assets/cookies/alex_parkhamovich.cookies.txt")
     end
 
     def save_session
