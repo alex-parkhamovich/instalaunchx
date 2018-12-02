@@ -17,8 +17,8 @@ module Bot
             return puts '--- automation disabled for current account ---' unless current_account.automation_enabled
             return puts '--- todays likes count is more than 900 for current account ---' if todays_likes_limit_reached?
 
-            visit follower_profile_url + 'feed'
-            next if profile_private_or_already_liked?(follower_profile_url)
+            visit follower_profile_url
+            next if profile_without_posts_or_private?(follower_profile_url)
 
             puts "--- #{follower_profile_url} posts liking process is started ---"
             like_followers_posts
@@ -32,57 +32,51 @@ module Bot
           Bot::LikesCounters::Builder.new.build
         end
 
-        def find_all_heart_buttons
-          wait_until_posts_load
-
-          page.find_all(
-            :xpath,
-            "//button[contains(@class, 'coreSpriteHeartOpen')]"
-          )
+        def fetch_posts_urls
+          post_urls = page.find_all(:xpath, "//a[contains(@href, '/p/')]")
+            .first(4)
+            .map { |post| post[:href] }
+          post_urls.delete_at(2)
+          post_urls
         end
 
         def like_followers_posts
-          find_all_heart_buttons.each_with_index do |button, index|
-            unless index == 2 || index > 3
-              press_heart_button(button)
-              puts "--- post number #{index + 1} successfully liked ---"
-            end
+          post_urls = fetch_posts_urls
+          return if post_urls.empty?
+
+          post_urls.each do |post_url|
+            visit post_url
+            next if post_already_liked?(post_url)
+
+            press_heart_button
+
+            puts "--- #{post_url} successfully liked ---"
           end
         end
 
-        def press_heart_button(button)
+        def press_heart_button
           around_like_delay
-          button.click
+          page.find(:xpath, "//button[contains(@class, 'coreSpriteHeartOpen')]").click
           count_likes_metric
           around_like_delay
         end
 
-        def profile_private_or_already_liked?(follower_profile_url)
-          if page.has_content?('This Account is Private')
-            puts "--- #{follower_profile_url} is private ---"
+        def post_already_liked?(post_url)
+          if page.has_xpath?("//*[@aria-label='Unlike']")
+            puts "--- #{post_url} have already liked ---"
             return true
           end
-          if page.has_xpath?("//*[@aria-label='Unlike']")
-            puts "--- #{follower_profile_url} have already liked ---"
+        end
+
+        def profile_without_posts_or_private?(follower_profile_url)
+          if page.has_content?('This Account is Private')
+            puts "--- #{follower_profile_url} is private ---"
             return true
           end
           if page.has_content?('No Posts Yet')
             puts "--- #{follower_profile_url} has no posts yet ---"
             return true
           end
-        end
-
-        def stop_working
-          current_account.update_attributes(
-            automation_enabled: false,
-            current_worker_id: nil
-          )
-        end
-
-        def wait_until_posts_load
-          page.execute_script 'window.scrollBy(0, 1000)'
-          sleep(5)
-          page.execute_script 'window.scrollBy(0, 1000)'
         end
       end
     end

@@ -6,7 +6,8 @@ ActiveAdmin.register Account do
     id_column
     column :automation_enabled
     column :current_worker_id
-    column :likes_count
+    column :created_at
+    column :updated_at
     actions
   end
 end
