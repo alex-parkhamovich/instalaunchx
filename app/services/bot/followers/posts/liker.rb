@@ -13,9 +13,12 @@ module Bot
         end
 
         def run
-          followers.each do |follower_profile_url|
+          new_followers = followers.drop(last_processed_index)
+          new_followers.each.with_index(last_processed_index) do |follower_profile_url, index|
             return puts '--- automation disabled for current account ---' unless current_account.automation_enabled
             return puts '--- todays likes count is more than 900 for current account ---' if todays_likes_limit_reached?
+
+            update_last_processed_index(index)
 
             visit follower_profile_url
             next if profile_without_posts_or_private?(follower_profile_url)
@@ -24,12 +27,17 @@ module Bot
             like_followers_posts
             puts "--- #{follower_profile_url} posts successfully liked ---"
           end
+          puts '--- PROMO COMPLETED ---'
         end
 
         private
 
-        def count_likes_metric
+        def count_metrics
           Bot::LikesCounters::Builder.new.build
+        end
+
+        def last_processed_index
+          current_promotion.followers_pack.last_processed_index
         end
 
         def fetch_posts_urls
@@ -57,7 +65,7 @@ module Bot
         def press_heart_button
           around_like_delay
           page.find(:xpath, "//button[contains(@class, 'coreSpriteHeartOpen')]").click
-          count_likes_metric
+          count_metrics
           around_like_delay
         end
 
@@ -77,6 +85,10 @@ module Bot
             puts "--- #{follower_profile_url} has no posts yet ---"
             return true
           end
+        end
+
+        def update_last_processed_index(index)
+          Bot::FollowersPacks::Builder.new.update(index: index)
         end
       end
     end
