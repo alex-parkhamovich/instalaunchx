@@ -9,7 +9,7 @@ module Bot
         def initialize
           restore_session
 
-          self.followers = current_promotion.followers_pack.followers
+          self.followers = current_followers_pack.followers
         end
 
         def run
@@ -37,7 +37,7 @@ module Bot
         end
 
         def last_processed_index
-          current_promotion.followers_pack.last_processed_index
+          current_followers_pack.last_processed_index
         end
 
         def fetch_posts_urls

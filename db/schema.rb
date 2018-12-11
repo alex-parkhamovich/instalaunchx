@@ -39,7 +39,7 @@ ActiveRecord::Schema.define(version: 2018_12_06_052510) do
     t.string "followers", default: [], array: true
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "last_processed_index"
+    t.integer "last_processed_index", default: 0
   end
 
   create_table "likes_counters", force: :cascade do |t|

@@ -1,7 +1,7 @@
 Rails.application.routes.draw do
   devise_for :admin_users, ActiveAdmin::Devise.config
   ActiveAdmin.routes(self)
-  root 'launchers#index'
 
-  resources :launchers
+  resources :promotions, only: [:create]
+  resources :followers_packs, only: [:create]
 end

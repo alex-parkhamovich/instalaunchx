@@ -6,16 +6,52 @@ ActiveAdmin.register Promotion do
     id_column
     column :account
     column :profile_names
-    column :tag_names
+
+    column :last_processed_profiles_status do |resource|
+      resource.last_processed_profiles_status
+    end
+    column :overall_processed_profiles_status do |resource|
+      resource.overall_processed_profiles_status
+    end
+
     column :status
-    column :likes_count
     column :worker_uuid
-    actions
+
+    actions do |resource|
+      item 'Fetch',
+        followers_packs_path(promotion_id: resource.id),
+        method: :post,
+        class: 'member_link',
+        data: {
+          confirm: 'Are you sure you want to fetch new followers pack?'
+        }
+      item 'Run',
+        promotions_path(promotion_id: resource.id),
+        method: :post,
+        class: 'member_link',
+        data: {
+          confirm: 'Are you sure you want to run promotion (autolike process will be started)?'
+        }
+    end
   end
 
-  filter :account
-  filter :status
-  filter :likes_count
+  show do
+    attributes_table do
+      row :account
+      row :profile_names
+
+      row :last_processed_profiles_status do |resource|
+        resource.last_processed_profiles_status
+      end
+
+      row :overall_processed_profiles_status do |resource|
+        resource.overall_processed_profiles_status
+      end
+
+      row :status
+      row :worker_uuid
+    end
+  end
 
   form do |f|
     f.inputs do

@@ -23,7 +23,7 @@ module Bot
     Capybara.default_driver = :mobile_chrome
 
     def todays_likes_limit_reached?
-      current_account.likes_counters.todays.map(&:amount).sum > 900
+      current_account.likes_today > 900
     end
 
     def around_like_delay
@@ -36,6 +36,10 @@ module Bot
 
     def current_promotion
       Promotion.last
+    end
+
+    def current_followers_pack
+      current_promotion.followers_packs.last
     end
 
     def human_delay

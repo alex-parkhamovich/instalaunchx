@@ -8,11 +8,7 @@ module Bot
       end
 
       def build
-        if current_followers_pack
-          current_followers_pack.update_attributes(followers: followers)
-        else
-          create_new_followers_pack
-        end
+        create_new_followers_pack
       end
 
       def update(index:)
@@ -28,10 +24,6 @@ module Bot
           promotion: current_promotion,
           followers: followers
         )
-      end
-
-      def current_followers_pack
-        current_promotion.followers_pack
       end
 
       def current_followers_count
