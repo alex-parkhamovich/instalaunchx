@@ -64,7 +64,12 @@ module Bot
 
         def press_heart_button
           around_like_delay
-          page.find(:xpath, "//button[contains(@class, 'coreSpriteHeartOpen')]").click
+
+          page.find_all(
+            :xpath,
+            "//span[contains(@class, 'glyphsSpriteHeart')]"
+          ).first.click
+
           count_metrics
           around_like_delay
         end

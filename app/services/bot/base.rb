@@ -48,7 +48,13 @@ module Bot
 
     def restore_session
       visit 'https://www.instagram.com/accounts/login/?source=auth_switcher'
-      Capybara.current_session.restore_cookies(File.join(Rails.root, 'lib/assets/cookies/alex_parkhamovich.cookies.txt'))
+
+      Capybara.current_session.restore_cookies(
+        File.join(
+          Rails.root,
+          'lib/assets/cookies/alex_parkhamovich.cookies.txt'
+        )
+      )
     end
 
     def save_session
